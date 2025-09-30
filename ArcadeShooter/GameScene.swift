@@ -56,6 +56,33 @@ class GameScene: SKScene {
 
     var enemyHealthMap: [SKSpriteNode: Int] = [:]  // Track enemy health
 
+    // Preloaded sound actions
+    var laserSoundAction: SKAction!
+    var explosionSoundAction: SKAction?
+    var soundCache: [String: SKAction] = [:]
+
+    // Loading callback
+    var onLoadingComplete: (() -> Void)?
+    var isPreloaded = false
+
+    func preloadSounds() {
+        // Preload laser sound to eliminate first-shot delay
+        laserSoundAction = SKAction.playSoundFileNamed(
+            "270551__littlerobotsoundfactory__laser_07.wav",
+            waitForCompletion: false
+        )
+
+        // Try to preload explosion sound if it exists
+        if let _ = Bundle.main.url(forResource: "explosion", withExtension: "wav") {
+            explosionSoundAction = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+            print("Explosion sound preloaded")
+        } else {
+            print("Explosion sound file not found - skipping preload")
+        }
+
+        print("Sounds preloaded")
+    }
+
     func createStarfield() {
         starfield = SKEmitterNode()
         starfield.particleTexture = SKTexture(imageNamed: "spark")
@@ -79,11 +106,8 @@ class GameScene: SKScene {
     }
 
     func createPlayer() {
-        player = SKSpriteNode(
-            texture: nil,
-            color: .cyan,
-            size: CGSize(width: 30, height: 30)
-        )
+        // Remove any existing player to prevent duplicates
+        childNode(withName: "player")?.removeFromParent()
 
         player = SKSpriteNode(imageNamed: "playerShip1_blue")
         player.setScale(0.5)  // Adjust size as needed
@@ -130,12 +154,7 @@ class GameScene: SKScene {
         bullet.position = position
         bullet.name = "bullet"
         addChild(bullet)
-        run(
-            SKAction.playSoundFileNamed(
-                "270551__littlerobotsoundfactory__laser_07.wav",
-                waitForCompletion: false
-            )
-        )
+        run(laserSoundAction)
         bullets.append(bullet)
 
         // Move bullet upward off screen
@@ -329,12 +348,17 @@ class GameScene: SKScene {
                                 levelUp()
                             }
 
-                            run(
-                                SKAction.playSoundFileNamed(
-                                    "explosion.wav",
-                                    waitForCompletion: false
+                            // Play explosion sound if preloaded, otherwise load it
+                            if let explosionSound = explosionSoundAction {
+                                run(explosionSound)
+                            } else {
+                                run(
+                                    SKAction.playSoundFileNamed(
+                                        "explosion.wav",
+                                        waitForCompletion: false
+                                    )
                                 )
-                            )
+                            }
                         } else {
                             // Enemy damaged but not destroyed (tank only)
                             // Flash the enemy
@@ -581,10 +605,14 @@ class GameScene: SKScene {
     }
 
     func playSound(named soundName: String) {
-        let sound = SKAction.playSoundFileNamed(
-            soundName,
-            waitForCompletion: false
-        )
+        // Use cached sound action if available, otherwise create and cache it
+        let sound: SKAction
+        if let cachedSound = soundCache[soundName] {
+            sound = cachedSound
+        } else {
+            sound = SKAction.playSoundFileNamed(soundName, waitForCompletion: false)
+            soundCache[soundName] = sound
+        }
         run(sound)
     }
 
@@ -734,6 +762,30 @@ class GameScene: SKScene {
 
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
+
+        // Only setup scene if preloading is complete
+        if isPreloaded {
+            setupScene()
+        }
+    }
+
+    func startPreloading() {
+        // Start preloading in background
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.preloadSounds()
+
+            // Simulate additional loading time for better UX
+            Thread.sleep(forTimeInterval: 1.0)
+
+            DispatchQueue.main.async {
+                self.isPreloaded = true
+                self.setupScene()
+                self.onLoadingComplete?()
+            }
+        }
+    }
+
+    func setupScene() {
         createStarfield()
         createPlayer()
 
@@ -750,12 +802,18 @@ class GameScene: SKScene {
     }
 
     func createHUD() {
+        // Remove any existing HUD elements to prevent duplicates
+        enumerateChildNodes(withName: "hudElement") { node, _ in
+            node.removeFromParent()
+        }
+
         // Top bar background
         let topBar = SKShapeNode(rectOf: CGSize(width: size.width, height: 120))
         topBar.fillColor = SKColor.black.withAlphaComponent(0.5)
         topBar.strokeColor = .clear
         topBar.position = CGPoint(x: size.width / 2, y: size.height - 60)
         topBar.zPosition = 10
+        topBar.name = "hudElement"
         addChild(topBar)
 
         // Score - Top Left
@@ -765,6 +823,7 @@ class GameScene: SKScene {
         scoreTitle.horizontalAlignmentMode = .left
         scoreTitle.position = CGPoint(x: 20, y: size.height - 70)
         scoreTitle.zPosition = 11
+        scoreTitle.name = "hudElement"
         addChild(scoreTitle)
 
         scoreLabel = SKLabelNode(text: "0")
@@ -773,6 +832,7 @@ class GameScene: SKScene {
         scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.position = CGPoint(x: 20, y: size.height - 100)
         scoreLabel.zPosition = 11
+        scoreLabel.name = "hudElement"
         addChild(scoreLabel)
 
         // Level - Top Center
@@ -782,6 +842,7 @@ class GameScene: SKScene {
         levelTitle.horizontalAlignmentMode = .center
         levelTitle.position = CGPoint(x: size.width / 2, y: size.height - 70)
         levelTitle.zPosition = 11
+        levelTitle.name = "hudElement"
         addChild(levelTitle)
 
         levelLabel = SKLabelNode(text: "1")
@@ -790,6 +851,7 @@ class GameScene: SKScene {
         levelLabel.horizontalAlignmentMode = .center
         levelLabel.position = CGPoint(x: size.width / 2, y: size.height - 100)
         levelLabel.zPosition = 11
+        levelLabel.name = "hudElement"
         addChild(levelLabel)
 
         // Health - Top Right with icons
@@ -799,6 +861,7 @@ class GameScene: SKScene {
         healthTitle.horizontalAlignmentMode = .right
         healthTitle.position = CGPoint(x: size.width - 20, y: size.height - 70)
         healthTitle.zPosition = 11
+        healthTitle.name = "hudElement"
         addChild(healthTitle)
 
         // Create health icons instead of number
@@ -807,7 +870,7 @@ class GameScene: SKScene {
             heart.fillColor = .red
             heart.strokeColor = .white
             heart.lineWidth = 2
-            heart.name = "heart_\(i)"
+            heart.name = "hudElement"
             heart.position = CGPoint(
                 x: size.width - 60 + CGFloat(i * 25),
                 y: size.height - 100
@@ -832,6 +895,7 @@ class GameScene: SKScene {
         shieldTitle.horizontalAlignmentMode = .right
         shieldTitle.position = CGPoint(x: size.width - 20, y: size.height - 150)
         shieldTitle.zPosition = 11
+        shieldTitle.name = "hudElement"
         addChild(shieldTitle)
 
         // Multi-shot counter (bottom right, above pause button)

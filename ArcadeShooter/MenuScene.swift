@@ -1,4 +1,5 @@
 import SpriteKit
+import UIKit
 
 class MenuScene: SKScene {
 
@@ -62,11 +63,8 @@ class MenuScene: SKScene {
         let tappedNode = atPoint(location)
 
         if tappedNode.name == "playButton" {
-            // Start game
-            let gameScene = GameScene(size: self.size)
-            gameScene.scaleMode = .aspectFill
-            let transition = SKTransition.fade(withDuration: 0.5)
-            view?.presentScene(gameScene, transition: transition)
+            // Show loading screen and start game
+            showLoadingScreen()
         }
 
         if tappedNode.name == "creditsButton" {
@@ -141,5 +139,141 @@ class MenuScene: SKScene {
         starfield.zPosition = -1  // Behind everything
 
         addChild(starfield)
+    }
+
+    func showLoadingScreen() {
+        // Hide existing UI elements
+        childNode(withName: "playButton")?.alpha = 0.3
+        childNode(withName: "creditsButton")?.alpha = 0.3
+
+        // Create loading background
+        let loadingBackground = SKShapeNode(rectOf: CGSize(width: size.width, height: size.height))
+        loadingBackground.fillColor = SKColor.black.withAlphaComponent(0.8)
+        loadingBackground.strokeColor = .clear
+        loadingBackground.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        loadingBackground.name = "loadingBackground"
+        loadingBackground.zPosition = 100
+        addChild(loadingBackground)
+
+        // Create loading label
+        let loadingLabel = SKLabelNode(text: "LOADING...")
+        loadingLabel.fontSize = 36
+        loadingLabel.fontColor = SKColor(red: 0, green: 1, blue: 0.53, alpha: 1) // Neon green
+        loadingLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 + 60)
+        loadingLabel.name = "loadingLabel"
+        loadingLabel.zPosition = 101
+        addChild(loadingLabel)
+
+        // Create space-themed loading spinner - rotating hexagon with orbiting dots
+        createLoadingSpinner()
+
+        // Animate loading text
+        let pulse = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.5, duration: 0.8),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.8)
+        ])
+        loadingLabel.run(SKAction.repeatForever(pulse))
+
+        // Start loading the game after a short delay to show the loading screen
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.loadGame()
+        }
+    }
+
+    func createLoadingSpinner() {
+        // Create hexagonal spinner
+        let hexagon = SKShapeNode()
+        let path = CGMutablePath()
+        let radius: CGFloat = 30
+        let centerX: CGFloat = size.width / 2
+        let centerY: CGFloat = size.height / 2 - 20
+
+        // Draw hexagon
+        for i in 0..<6 {
+            let angle = CGFloat(i) * .pi / 3
+            let x = centerX + radius * cos(angle)
+            let y = centerY + radius * sin(angle)
+            if i == 0 {
+                path.move(to: CGPoint(x: x, y: y))
+            } else {
+                path.addLine(to: CGPoint(x: x, y: y))
+            }
+        }
+        path.closeSubpath()
+
+        hexagon.path = path
+        hexagon.strokeColor = SKColor(red: 0, green: 0.8, blue: 1, alpha: 1) // Neon cyan
+        hexagon.lineWidth = 3
+        hexagon.fillColor = .clear
+        hexagon.name = "loadingSpinner"
+        hexagon.zPosition = 101
+        addChild(hexagon)
+
+        // Rotate the hexagon
+        let rotation = SKAction.rotate(byAngle: .pi * 2, duration: 2.0)
+        hexagon.run(SKAction.repeatForever(rotation))
+
+        // Create orbiting dots
+        for i in 0..<3 {
+            let dot = SKShapeNode(circleOfRadius: 4)
+            dot.fillColor = SKColor(red: 0, green: 1, blue: 0.53, alpha: 1) // Neon green
+            dot.strokeColor = .clear
+            dot.name = "orbitDot\(i)"
+            dot.zPosition = 102
+
+            // Position dot at different angles around the hexagon
+            let angle = CGFloat(i) * (2 * .pi / 3)
+            let orbitRadius: CGFloat = 45
+            dot.position = CGPoint(
+                x: centerX + orbitRadius * cos(angle),
+                y: centerY + orbitRadius * sin(angle)
+            )
+            addChild(dot)
+
+            // Create orbital motion
+            let orbitPath = UIBezierPath(
+                arcCenter: CGPoint(x: centerX, y: centerY),
+                radius: orbitRadius,
+                startAngle: angle,
+                endAngle: angle + 2 * .pi,
+                clockwise: true
+            )
+
+            let orbit = SKAction.follow(
+                orbitPath.cgPath,
+                asOffset: false,
+                orientToPath: false,
+                duration: 1.5
+            )
+            dot.run(SKAction.repeatForever(orbit))
+
+            // Add pulsing effect
+            let pulse = SKAction.sequence([
+                SKAction.scale(to: 1.5, duration: 0.5),
+                SKAction.scale(to: 1.0, duration: 0.5)
+            ])
+            dot.run(SKAction.repeatForever(pulse))
+        }
+    }
+
+    func loadGame() {
+        // Create the game scene and let it preload
+        let gameScene = GameScene(size: self.size)
+        gameScene.scaleMode = .aspectFill
+
+        // Set a callback for when loading is complete
+        gameScene.onLoadingComplete = { [weak self] in
+            DispatchQueue.main.async {
+                self?.transitionToGame(gameScene)
+            }
+        }
+
+        // Start the loading process
+        gameScene.startPreloading()
+    }
+
+    func transitionToGame(_ gameScene: GameScene) {
+        let transition = SKTransition.fade(withDuration: 0.5)
+        view?.presentScene(gameScene, transition: transition)
     }
 }
