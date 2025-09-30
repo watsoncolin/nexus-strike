@@ -12,7 +12,7 @@ class MenuScene: SKScene {
         highScore = UserDefaults.standard.integer(forKey: "highScore")
 
         // Title
-        let titleLabel = SKLabelNode(text: "ARCADE SHOOTER")
+        let titleLabel = SKLabelNode(text: "Starfall")
         titleLabel.fontSize = 56
         titleLabel.fontColor = .white
         titleLabel.position = CGPoint(x: size.width / 2, y: size.height - 150)
@@ -89,6 +89,9 @@ class MenuScene: SKScene {
             Laser_07.wav by LittleRobotSoundFactory
             https://freesound.org/s/270551/
             License: Attribution 4.0
+            
+            Spaceships:
+            https://kenney.nl/assets/space-shooter-redux
 
             Tap to close
             """
