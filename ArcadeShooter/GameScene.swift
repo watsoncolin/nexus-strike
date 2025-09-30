@@ -770,18 +770,14 @@ class GameScene: SKScene {
     }
 
     func startPreloading() {
-        // Start preloading in background
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.preloadSounds()
+        // Preload sounds immediately
+        preloadSounds()
 
-            // Simulate additional loading time for better UX
-            Thread.sleep(forTimeInterval: 1.0)
-
-            DispatchQueue.main.async {
-                self.isPreloaded = true
-                self.setupScene()
-                self.onLoadingComplete?()
-            }
+        // Use DispatchQueue for timing since scene might not be presented yet
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.isPreloaded = true
+            self?.setupScene()
+            self?.onLoadingComplete?()
         }
     }
 

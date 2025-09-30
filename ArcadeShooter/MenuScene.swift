@@ -181,7 +181,7 @@ class MenuScene: SKScene {
     }
 
     func createLoadingSpinner() {
-        // Create hexagonal spinner
+        // Create hexagonal spinner (original style but optimized)
         let hexagon = SKShapeNode()
         let path = CGMutablePath()
         let radius: CGFloat = 30
@@ -209,11 +209,11 @@ class MenuScene: SKScene {
         hexagon.zPosition = 101
         addChild(hexagon)
 
-        // Rotate the hexagon
+        // Smooth rotation
         let rotation = SKAction.rotate(byAngle: .pi * 2, duration: 2.0)
         hexagon.run(SKAction.repeatForever(rotation))
 
-        // Create orbiting dots
+        // Create orbiting dots with container nodes for smoother animation
         for i in 0..<3 {
             let dot = SKShapeNode(circleOfRadius: 4)
             dot.fillColor = SKColor(red: 0, green: 1, blue: 0.53, alpha: 1) // Neon green
@@ -221,33 +221,25 @@ class MenuScene: SKScene {
             dot.name = "orbitDot\(i)"
             dot.zPosition = 102
 
-            // Position dot at different angles around the hexagon
-            let angle = CGFloat(i) * (2 * .pi / 3)
+            // Create container for smooth orbital motion
+            let orbitContainer = SKNode()
+            orbitContainer.position = CGPoint(x: centerX, y: centerY)
+
+            // Position dots at different starting angles
+            let startAngle = CGFloat(i) * (2 * .pi / 3)
+            orbitContainer.zRotation = startAngle
+            addChild(orbitContainer)
+
+            // Position dot at orbit radius
             let orbitRadius: CGFloat = 45
-            dot.position = CGPoint(
-                x: centerX + orbitRadius * cos(angle),
-                y: centerY + orbitRadius * sin(angle)
-            )
-            addChild(dot)
+            dot.position = CGPoint(x: orbitRadius, y: 0)
+            orbitContainer.addChild(dot)
 
-            // Create orbital motion
-            let orbitPath = UIBezierPath(
-                arcCenter: CGPoint(x: centerX, y: centerY),
-                radius: orbitRadius,
-                startAngle: angle,
-                endAngle: angle + 2 * .pi,
-                clockwise: true
-            )
+            // Orbital rotation
+            let orbit = SKAction.rotate(byAngle: .pi * 2, duration: 1.5)
+            orbitContainer.run(SKAction.repeatForever(orbit))
 
-            let orbit = SKAction.follow(
-                orbitPath.cgPath,
-                asOffset: false,
-                orientToPath: false,
-                duration: 1.5
-            )
-            dot.run(SKAction.repeatForever(orbit))
-
-            // Add pulsing effect
+            // Pulsing effect
             let pulse = SKAction.sequence([
                 SKAction.scale(to: 1.5, duration: 0.5),
                 SKAction.scale(to: 1.0, duration: 0.5)
