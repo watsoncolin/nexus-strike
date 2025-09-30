@@ -12,7 +12,7 @@ class MenuScene: SKScene {
         highScore = UserDefaults.standard.integer(forKey: "highScore")
 
         // Title
-        let titleLabel = SKLabelNode(text: "Starfall")
+        let titleLabel = SKLabelNode(text: "Nexus Strike")
         titleLabel.fontSize = 56
         titleLabel.fontColor = .white
         titleLabel.position = CGPoint(x: size.width / 2, y: size.height - 150)
