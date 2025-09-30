@@ -88,7 +88,7 @@ Responsive touch controls
 Scalable difficulty system
 
 Privacy
-Starfall does not collect any user data. High scores are stored locally on your device only.
+Nexus Strike does not collect any user data. High scores are stored locally on your device only.
 License
 [Choose a license - MIT is common for open source games]
 Author
