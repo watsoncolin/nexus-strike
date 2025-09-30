@@ -1,0 +1,255 @@
+---
+layout: default
+title: Privacy Policy - Nexus Strike
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Nexus Strike</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a23 0%, #1a1a3e 50%, #2d1b69 100%);
+            color: #ffffff;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(100, 200, 255, 0.3);
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #00ccff, #ff6b6b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .game-name {
+            font-size: 1.5rem;
+            color: #a0a0ff;
+            margin-bottom: 20px;
+        }
+
+        .last-updated {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #00ccff;
+            margin: 30px 0 20px 0;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            border-bottom: 2px solid rgba(0, 204, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .highlight-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight-box .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .data-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #00ff88;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #00ccff, #00ff88);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 204, 255, 0.4);
+            margin-top: 30px;
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 204, 255, 0.6);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 40px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="page-title">PRIVACY POLICY</h1>
+            <p class="game-name">Nexus Strike</p>
+            <p class="last-updated">Last Updated: 2025-09-30</p>
+        </header>
+
+        <div class="content">
+            <div class="highlight-box">
+                <span class="icon">🔒</span>
+                <h3>Privacy First Gaming</h3>
+                <p>Nexus Strike is designed with your privacy in mind. We believe your gaming data should stay on your device, where it belongs.</p>
+            </div>
+
+            <h2 class="section-title">🛡️ Information Collection and Use</h2>
+            <p>Nexus Strike does not collect, store, or transmit any personal information from its users. The app functions entirely offline and does not require an internet connection.</p>
+
+            <h2 class="section-title">💾 Data Storage</h2>
+            <p>The only data stored by Nexus Strike is:</p>
+
+            <div class="data-item">
+                <strong>🏆 High Scores</strong><br>
+                Your best game scores, saved locally on your device
+            </div>
+
+            <div class="data-item">
+                <strong>⚙️ Game Settings</strong><br>
+                Your preferences and game progress, saved locally on your device
+            </div>
+
+            <p>This data is stored using iOS's standard UserDefaults system and never leaves your device. It is not transmitted to any servers or third parties.</p>
+
+            <h2 class="section-title">🚫 Third-Party Services</h2>
+            <p>Nexus Strike does not use any third-party analytics, advertising, or tracking services. Your gameplay remains completely private.</p>
+
+            <h2 class="section-title">👨‍👩‍👧‍👦 Children's Privacy</h2>
+            <p>Nexus Strike does not knowingly collect any information from children or anyone else. The app is safe for users of all ages and complies with children's privacy protection standards.</p>
+
+            <h2 class="section-title">📝 Changes to This Privacy Policy</h2>
+            <p>We may update this privacy policy from time to time. Any changes will be reflected in the app's listing on the App Store and on this website.</p>
+
+            <div class="highlight-box">
+                <span class="icon">🌟</span>
+                <h3>Questions or Concerns?</h3>
+                <p>If you have any questions about this privacy policy or how your data is handled, feel free to reach out through our GitHub repository.</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Game</a>
+
+        <footer>
+            <p>&copy; 2025 Colin Watson. Your privacy is protected.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create animated stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 80;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+
+                // Random position
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+
+                // Random size
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+
+                // Random animation delay
+                star.style.animationDelay = Math.random() * 2 + 's';
+
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Initialize stars when page loads
+        document.addEventListener('DOMContentLoaded', createStars);
+    </script>
+</body>
+</html>
