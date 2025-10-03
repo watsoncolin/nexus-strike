@@ -24,7 +24,6 @@ class GameScene: SKScene {
     var difficulty: CGFloat = 1.0  // Multiplier for difficulty
     var survivalTime: TimeInterval = 0
     var health: Int = 3
-    var healthLabel: SKLabelNode!
     var powerUps: [SKSpriteNode] = []
     var lastPowerUpSpawnTime: TimeInterval = 0
     let powerUpSpawnInterval: TimeInterval = 10.0  // Spawn every 10 seconds
@@ -73,8 +72,13 @@ class GameScene: SKScene {
         )
 
         // Try to preload explosion sound if it exists
-        if let _ = Bundle.main.url(forResource: "explosion", withExtension: "wav") {
-            explosionSoundAction = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        if Bundle.main.url(forResource: "explosion", withExtension: "wav")
+            != nil
+        {
+            explosionSoundAction = SKAction.playSoundFileNamed(
+                "explosion.wav",
+                waitForCompletion: false
+            )
             print("Explosion sound preloaded")
         } else {
             print("Explosion sound file not found - skipping preload")
@@ -109,8 +113,8 @@ class GameScene: SKScene {
         // Remove any existing player to prevent duplicates
         childNode(withName: "player")?.removeFromParent()
 
-        player = SKSpriteNode(imageNamed: "playerShip1_blue")
-        player.setScale(0.5)  // Adjust size as needed
+        player = SKSpriteNode(imageNamed: "player")
+        player.setScale(0.2)  // Adjust size as needed
         player.position = CGPoint(x: size.width / 2, y: 100)
         player.name = "player"
         addChild(player)
@@ -149,7 +153,7 @@ class GameScene: SKScene {
     }
 
     func createSingleBullet(at position: CGPoint) {
-        let bullet = SKSpriteNode(imageNamed: "laserBlue01")
+        let bullet = SKSpriteNode(imageNamed: "laser_blue")
         bullet.setScale(0.5)
         bullet.position = position
         bullet.name = "bullet"
@@ -210,26 +214,27 @@ class GameScene: SKScene {
 
         let enemy: SKSpriteNode
         var duration: TimeInterval = 4.0
-        var health = 1
+        var enemyHealth = 1
 
         switch enemyType {
         case .normal:
-            enemy = SKSpriteNode(imageNamed: "enemyRed1")
-            enemy.setScale(0.5)
+            enemy = SKSpriteNode(imageNamed: "enemy_1")
+            enemy.setScale(0.25)
+
             duration = 4.0
-            health = 1
+            enemyHealth = 1
 
         case .fast:
-            enemy = SKSpriteNode(imageNamed: "enemyGreen1")
-            enemy.setScale(0.4)
+            enemy = SKSpriteNode(imageNamed: "enemy_2")
+            enemy.setScale(0.15)
             duration = 2.5  // Faster!
-            health = 1
+            enemyHealth = 1
 
         case .tank:
-            enemy = SKSpriteNode(imageNamed: "enemyBlack1")
-            enemy.setScale(0.7)
+            enemy = SKSpriteNode(imageNamed: "enemy_3")
+            enemy.setScale(0.3)
             duration = 5.0  // Slower
-            health = 2  // Takes 2 hits!
+            enemyHealth = 2  // Takes 2 hits!
         }
 
         // Random X position across the top of screen
@@ -238,7 +243,7 @@ class GameScene: SKScene {
         enemy.name = "enemy"
         addChild(enemy)
         enemies.append(enemy)
-        enemyHealthMap[enemy] = health
+        enemyHealthMap[enemy] = enemyHealth
 
         // Move enemy downward
         let moveAction = SKAction.moveBy(
@@ -261,18 +266,18 @@ class GameScene: SKScene {
 
         switch powerUpType {
         case .rapidFire:
-            powerUp = SKSpriteNode(imageNamed: "pill_green")
-            powerUp.setScale(0.7)
+            powerUp = SKSpriteNode(imageNamed: "power_up_fire_rate")
+            powerUp.setScale(0.4)
             powerUp.name = "powerup_rapidfire"
 
         case .shield:
-            powerUp = SKSpriteNode(imageNamed: "pill_blue")
-            powerUp.setScale(0.7)
+            powerUp = SKSpriteNode(imageNamed: "power_up_shield")
+            powerUp.setScale(0.4)
             powerUp.name = "powerup_shield"
 
         case .multiShot:
-            powerUp = SKSpriteNode(imageNamed: "pill_red")
-            powerUp.setScale(0.7)
+            powerUp = SKSpriteNode(imageNamed: "power_up_multi_shot")
+            powerUp.setScale(0.4)
             powerUp.name = "powerup_multishot"
         }
 
@@ -400,12 +405,14 @@ class GameScene: SKScene {
             showLevelUpMessage()
         }
     }
+
     func spawnBoss() {
         bossActive = true
 
         // Show boss warning with proper wrapping
         let warningLabel = SKLabelNode(text: "BOSS")
-        warningLabel.fontSize = 80
+        warningLabel.fontName = "PressStart2P-Regular"
+        warningLabel.fontSize = 40
         warningLabel.fontColor = .red
         warningLabel.position = CGPoint(
             x: size.width / 2,
@@ -415,7 +422,8 @@ class GameScene: SKScene {
         addChild(warningLabel)
 
         let incomingLabel = SKLabelNode(text: "INCOMING!")
-        incomingLabel.fontSize = 48
+        incomingLabel.fontName = "PressStart2P-Regular"
+        incomingLabel.fontSize = 24
         incomingLabel.fontColor = .red
         incomingLabel.position = CGPoint(
             x: size.width / 2,
@@ -443,8 +451,8 @@ class GameScene: SKScene {
 
     func createBoss() {
         // Create large boss enemy
-        boss = SKSpriteNode(imageNamed: "enemyBlack5")
-        boss!.setScale(2.0)  // Make it much bigger than normal enemies
+        boss = SKSpriteNode(imageNamed: "enemy_boss_1")
+        boss!.setScale(1.0)  // Make it much bigger than normal enemies
         boss!.name = "boss"
 
         // Boss shape - make it intimidating
@@ -562,7 +570,8 @@ class GameScene: SKScene {
 
         // Show victory message - split into two lines
         let victoryLabel = SKLabelNode(text: "BOSS")
-        victoryLabel.fontSize = 64
+        victoryLabel.fontName = "PressStart2P-Regular"
+        victoryLabel.fontSize = 32
         victoryLabel.fontColor = .yellow
         victoryLabel.position = CGPoint(
             x: size.width / 2,
@@ -572,7 +581,8 @@ class GameScene: SKScene {
         addChild(victoryLabel)
 
         let defeatedLabel = SKLabelNode(text: "DEFEATED!")
-        defeatedLabel.fontSize = 48
+        defeatedLabel.fontName = "PressStart2P-Regular"
+        defeatedLabel.fontSize = 24
         defeatedLabel.fontColor = .yellow
         defeatedLabel.position = CGPoint(
             x: size.width / 2,
@@ -589,7 +599,8 @@ class GameScene: SKScene {
 
     func showLevelUpMessage() {
         let levelUpLabel = SKLabelNode(text: "LEVEL \(currentLevel)")
-        levelUpLabel.fontSize = 72
+        levelUpLabel.fontName = "PressStart2P-Regular"
+        levelUpLabel.fontSize = 36
         levelUpLabel.fontColor = .yellow
         levelUpLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
         levelUpLabel.zPosition = 100
@@ -610,7 +621,10 @@ class GameScene: SKScene {
         if let cachedSound = soundCache[soundName] {
             sound = cachedSound
         } else {
-            sound = SKAction.playSoundFileNamed(soundName, waitForCompletion: false)
+            sound = SKAction.playSoundFileNamed(
+                soundName,
+                waitForCompletion: false
+            )
             soundCache[soundName] = sound
         }
         run(sound)
@@ -637,6 +651,7 @@ class GameScene: SKScene {
         ])
         camera?.run(shake)
     }
+
     func checkPlayerCollisions() {
         for enemy in enemies {
             if enemy.frame.intersects(player.frame) {
@@ -647,15 +662,12 @@ class GameScene: SKScene {
                     createExplosion(at: enemy.position)
                     removeEnemy(enemy)
                     shakeScreen()
-                    print(
-                        "Shield absorbed hit! Shields remaining: \(shieldCount)"
-                    )
                     return
                 }
 
                 removeEnemy(enemy)
                 health -= 1
-                updateHealthDisplay()  // Changed this line
+                updateHealthDisplay()
                 shakeScreen()
 
                 if health <= 0 {
@@ -665,6 +677,7 @@ class GameScene: SKScene {
             }
         }
     }
+
     func gameOver() {
         gameRunning = false
 
@@ -722,7 +735,8 @@ class GameScene: SKScene {
 
         // Create game over display
         let gameOverLabel = SKLabelNode(text: "GAME OVER")
-        gameOverLabel.fontSize = 64
+        gameOverLabel.fontName = "PressStart2P-Regular"
+        gameOverLabel.fontSize = 32
         gameOverLabel.fontColor = .red
         gameOverLabel.position = CGPoint(
             x: size.width / 2,
@@ -731,7 +745,8 @@ class GameScene: SKScene {
         addChild(gameOverLabel)
 
         let finalScoreLabel = SKLabelNode(text: "Final Score: \(score)")
-        finalScoreLabel.fontSize = 32
+        finalScoreLabel.fontName = "PressStart2P-Regular"
+        finalScoreLabel.fontSize = 18
         finalScoreLabel.fontColor = .white
         finalScoreLabel.position = CGPoint(
             x: size.width / 2,
@@ -739,18 +754,9 @@ class GameScene: SKScene {
         )
         addChild(finalScoreLabel)
 
-        let restartLabel = SKLabelNode(text: "Tap to Restart")
-        restartLabel.fontSize = 24
-        restartLabel.fontColor = .yellow
-        restartLabel.name = "restart"
-        restartLabel.position = CGPoint(
-            x: size.width / 2,
-            y: size.height / 2 - 80
-        )
-        addChild(restartLabel)
-
         let menuLabel = SKLabelNode(text: "Main Menu")
-        menuLabel.fontSize = 24
+        menuLabel.fontName = "PressStart2P-Regular"
+        menuLabel.fontSize = 12
         menuLabel.fontColor = .white
         menuLabel.name = "mainMenu"
         menuLabel.position = CGPoint(
@@ -794,10 +800,18 @@ class GameScene: SKScene {
         self.camera = camera
         addChild(camera)
 
-        print("Scene setup complete")
+        updateHealthDisplay()
+
+        for family in UIFont.familyNames.sorted() {
+            print("Family: \(family)")
+            for name in UIFont.fontNames(forFamilyName: family) {
+                print("  - \(name)")
+            }
+        }
     }
 
     func createHUD() {
+        var hudLabelFontSize = 14.0
         // Remove any existing HUD elements to prevent duplicates
         enumerateChildNodes(withName: "hudElement") { node, _ in
             node.removeFromParent()
@@ -814,7 +828,8 @@ class GameScene: SKScene {
 
         // Score - Top Left
         let scoreTitle = SKLabelNode(text: "SCORE")
-        scoreTitle.fontSize = 18
+        scoreTitle.fontName = "PressStart2P-Regular"
+        scoreTitle.fontSize = hudLabelFontSize
         scoreTitle.fontColor = .gray
         scoreTitle.horizontalAlignmentMode = .left
         scoreTitle.position = CGPoint(x: 20, y: size.height - 70)
@@ -823,7 +838,8 @@ class GameScene: SKScene {
         addChild(scoreTitle)
 
         scoreLabel = SKLabelNode(text: "0")
-        scoreLabel.fontSize = 32
+        scoreLabel.fontName = "PressStart2P-Regular"
+        scoreLabel.fontSize = hudLabelFontSize
         scoreLabel.fontColor = .white
         scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.position = CGPoint(x: 20, y: size.height - 100)
@@ -833,7 +849,8 @@ class GameScene: SKScene {
 
         // Level - Top Center
         let levelTitle = SKLabelNode(text: "LEVEL")
-        levelTitle.fontSize = 18
+        levelTitle.fontName = "PressStart2P-Regular"
+        levelTitle.fontSize = hudLabelFontSize
         levelTitle.fontColor = .gray
         levelTitle.horizontalAlignmentMode = .center
         levelTitle.position = CGPoint(x: size.width / 2, y: size.height - 70)
@@ -842,7 +859,8 @@ class GameScene: SKScene {
         addChild(levelTitle)
 
         levelLabel = SKLabelNode(text: "1")
-        levelLabel.fontSize = 32
+        levelLabel.fontName = "PressStart2P-Regular"
+        levelLabel.fontSize = hudLabelFontSize
         levelLabel.fontColor = .cyan
         levelLabel.horizontalAlignmentMode = .center
         levelLabel.position = CGPoint(x: size.width / 2, y: size.height - 100)
@@ -852,7 +870,8 @@ class GameScene: SKScene {
 
         // Health - Top Right with icons
         let healthTitle = SKLabelNode(text: "HEALTH")
-        healthTitle.fontSize = 18
+        healthTitle.fontName = "PressStart2P-Regular"
+        healthTitle.fontSize = hudLabelFontSize
         healthTitle.fontColor = .gray
         healthTitle.horizontalAlignmentMode = .right
         healthTitle.position = CGPoint(x: size.width - 20, y: size.height - 70)
@@ -862,11 +881,12 @@ class GameScene: SKScene {
 
         // Create health icons instead of number
         for i in 0..<3 {
+            if childNode(withName: "heart_\(i)") != nil { continue }
             let heart = SKShapeNode(circleOfRadius: 8)
             heart.fillColor = .red
             heart.strokeColor = .white
             heart.lineWidth = 2
-            heart.name = "hudElement"
+            heart.name = "heart_\(i)"
             heart.position = CGPoint(
                 x: size.width - 60 + CGFloat(i * 25),
                 y: size.height - 100
@@ -875,9 +895,9 @@ class GameScene: SKScene {
             addChild(heart)
         }
 
-        // Pause button - Top Right Corner
         pauseButton = SKLabelNode(text: "❚❚")
-        pauseButton.fontSize = 32
+        pauseButton.fontSize = 28
+        pauseButton.fontName = "PressStart2P-Regular"
         pauseButton.fontColor = .white
         pauseButton.name = "pauseButton"
         pauseButton.position = CGPoint(x: size.width - 30, y: 30)
@@ -886,7 +906,8 @@ class GameScene: SKScene {
 
         // Shield indicator title (below health)
         let shieldTitle = SKLabelNode(text: "SHIELDS")
-        shieldTitle.fontSize = 14
+        shieldTitle.fontName = "PressStart2P-Regular"
+        shieldTitle.fontSize = hudLabelFontSize
         shieldTitle.fontColor = .cyan
         shieldTitle.horizontalAlignmentMode = .right
         shieldTitle.position = CGPoint(x: size.width - 20, y: size.height - 150)
@@ -896,6 +917,7 @@ class GameScene: SKScene {
 
         // Multi-shot counter (bottom right, above pause button)
         let multiShotLabel = SKLabelNode(text: "x3")
+        multiShotLabel.fontName = "PressStart2P-Regular"
         multiShotLabel.fontSize = 24
         multiShotLabel.fontColor = .orange
         multiShotLabel.horizontalAlignmentMode = .right
@@ -920,10 +942,13 @@ class GameScene: SKScene {
     func updateHealthDisplay() {
         for i in 0..<3 {
             if let heart = childNode(withName: "heart_\(i)") as? SKShapeNode {
+                print("heart found at index \(i)")
                 if i < health {
+                    print("heart is alive")
                     heart.fillColor = .red
                     heart.alpha = 1.0
                 } else {
+                    print("heart is grey")
                     heart.fillColor = .gray
                     heart.alpha = 0.3
                 }
@@ -948,7 +973,8 @@ class GameScene: SKScene {
 
         // Pause title
         let pauseLabel = SKLabelNode(text: "PAUSED")
-        pauseLabel.fontSize = 64
+        pauseLabel.fontName = "PressStart2P-Regular"
+        pauseLabel.fontSize = 32
         pauseLabel.fontColor = .white
         pauseLabel.position = CGPoint(
             x: size.width / 2,
@@ -960,7 +986,8 @@ class GameScene: SKScene {
 
         // Resume button
         let resumeButton = SKLabelNode(text: "Resume")
-        resumeButton.fontSize = 36
+        resumeButton.fontName = "PressStart2P-Regular"
+        resumeButton.fontSize = 18
         resumeButton.fontColor = .green
         resumeButton.name = "resumeButton"
         resumeButton.position = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -969,7 +996,8 @@ class GameScene: SKScene {
 
         // Quit button
         let quitButton = SKLabelNode(text: "Main Menu")
-        quitButton.fontSize = 36
+        quitButton.fontName = "PressStart2P-Regular"
+        quitButton.fontSize = 18
         quitButton.fontColor = .red
         quitButton.name = "quitButton"
         quitButton.position = CGPoint(
@@ -1108,7 +1136,6 @@ class GameScene: SKScene {
             print("Max shields reached! Converted to 50 points")
         }
     }
-
     func updateShieldDisplay() {
         // Remove old shield icons
         for icon in shieldIcons {
@@ -1139,20 +1166,52 @@ class GameScene: SKScene {
             shield.run(SKAction.repeatForever(pulse))
         }
 
+        // Add shield arc around player if any shields active
         if shieldCount > 0 && player.childNode(withName: "shieldBubble") == nil
         {
-            let shieldBubble = SKSpriteNode(imageNamed: "shield2")
-            shieldBubble.setScale(1.5)
-            shieldBubble.name = "shieldBubble"
-            shieldBubble.alpha = 0.7
-            shieldBubble.zPosition = -1
-            player.addChild(shieldBubble)
+            // Create multiple arc layers for fade effect
+            let shieldContainer = SKNode()
+            shieldContainer.name = "shieldBubble"
+            shieldContainer.zPosition = 10
+
+            for i in 0..<5 {
+                let baseRadius: CGFloat = 140 + CGFloat(i) * 3
+                let alpha: CGFloat = 0.6 - (CGFloat(i) * 0.1)
+
+                // Create an arc instead of full circle
+                // Arc goes from -120 degrees to +120 degrees (240 degree arc in front)
+                let path = CGMutablePath()
+
+                // Create ellipse by scaling horizontally
+                let ellipseTransform = CGAffineTransform(scaleX: 1.25, y: 1.0)  // 1.25x wider
+
+                path.addArc(
+                    center: .zero,
+                    radius: baseRadius,
+                    startAngle: CGFloat.pi * 0.25,  // 45° right of top
+                    endAngle: CGFloat.pi * 0.75,  // 45° left of top
+                    clockwise: false,
+                    transform: ellipseTransform
+                )
+
+                let arc = SKShapeNode(path: path)
+                arc.strokeColor = .cyan
+                arc.lineWidth = 5
+                arc.fillColor = .clear
+                arc.alpha = alpha
+                arc.blendMode = .add
+                arc.zPosition = CGFloat(i)
+
+                shieldContainer.addChild(arc)
+            }
+
+            player.addChild(shieldContainer)
 
             let pulse = SKAction.sequence([
-                SKAction.scale(to: 1.6, duration: 0.5),
-                SKAction.scale(to: 1.5, duration: 0.5),
+                SKAction.scale(to: 1.15, duration: 0.5),
+                SKAction.scale(to: 1.0, duration: 0.5),
             ])
-            shieldBubble.run(SKAction.repeatForever(pulse))
+            shieldContainer.run(SKAction.repeatForever(pulse))
         } else if shieldCount == 0 {
             player.childNode(withName: "shieldBubble")?.removeFromParent()
         }
@@ -1225,12 +1284,6 @@ class GameScene: SKScene {
             adjustedSpawnInterval,
             minimumSpawnInterval
         )
-
-        // Spawn enemies at increasing rate
-        if currentTime - lastEnemySpawnTime > finalSpawnInterval {
-            spawnEnemy()
-            lastEnemySpawnTime = currentTime
-        }
 
         // Spawn power-ups
         if currentTime - lastPowerUpSpawnTime > powerUpSpawnInterval {

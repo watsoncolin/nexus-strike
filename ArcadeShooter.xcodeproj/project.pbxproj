@@ -10,9 +10,22 @@
 		6889DCF92E89D6B80024011C /* ArcadeShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArcadeShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		681EF7E82E8F542500246EA4 /* Exceptions for "ArcadeShooter" folder in "ArcadeShooter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6889DCF82E89D6B80024011C /* ArcadeShooter */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6889DCFB2E89D6B80024011C /* ArcadeShooter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				681EF7E82E8F542500246EA4 /* Exceptions for "ArcadeShooter" folder in "ArcadeShooter" target */,
+			);
 			path = ArcadeShooter;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M7PCWQ7WYN;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ArcadeShooter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Nexus Strike";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -295,6 +309,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M7PCWQ7WYN;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ArcadeShooter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Nexus Strike";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

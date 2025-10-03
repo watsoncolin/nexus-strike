@@ -14,14 +14,16 @@ class MenuScene: SKScene {
 
         // Title
         let titleLabel = SKLabelNode(text: "Nexus Strike")
-        titleLabel.fontSize = 56
+        titleLabel.fontName = "PressStart2P-Regular"
+        titleLabel.fontSize = 24
         titleLabel.fontColor = .white
         titleLabel.position = CGPoint(x: size.width / 2, y: size.height - 150)
         addChild(titleLabel)
 
         // Play button
         let playButton = SKLabelNode(text: "PLAY")
-        playButton.fontSize = 48
+        playButton.fontName = "PressStart2P-Regular"
+        playButton.fontSize = 24
         playButton.fontColor = .green
         playButton.name = "playButton"
         playButton.position = CGPoint(
@@ -32,7 +34,8 @@ class MenuScene: SKScene {
 
         // High score display
         let highScoreLabel = SKLabelNode(text: "High Score: \(highScore)")
-        highScoreLabel.fontSize = 32
+        highScoreLabel.fontName = "PressStart2P-Regular"
+        highScoreLabel.fontSize = 18
         highScoreLabel.fontColor = .yellow
         highScoreLabel.position = CGPoint(
             x: size.width / 2,
@@ -42,7 +45,8 @@ class MenuScene: SKScene {
 
         // Credits button
         let creditsButton = SKLabelNode(text: "Credits")
-        creditsButton.fontSize = 24
+        creditsButton.fontName = "PressStart2P-Regular"
+        creditsButton.fontSize = 14
         creditsButton.fontColor = .white
         creditsButton.name = "creditsButton"
         creditsButton.position = CGPoint(x: size.width / 2, y: 100)
@@ -87,15 +91,13 @@ class MenuScene: SKScene {
             Laser_07.wav by LittleRobotSoundFactory
             https://freesound.org/s/270551/
             License: Attribution 4.0
-            
-            Spaceships:
-            https://kenney.nl/assets/space-shooter-redux
 
             Tap to close
             """
 
         let creditsLabel = SKLabelNode()
         creditsLabel.text = creditsText
+        creditsLabel.fontName = "PressStart2P-Regular"
         creditsLabel.fontSize = 16
         creditsLabel.fontColor = .white
         creditsLabel.numberOfLines = 0
@@ -157,7 +159,8 @@ class MenuScene: SKScene {
 
         // Create loading label
         let loadingLabel = SKLabelNode(text: "LOADING...")
-        loadingLabel.fontSize = 36
+        loadingLabel.fontName = "PressStart2P-Regular"
+        loadingLabel.fontSize = 24
         loadingLabel.fontColor = SKColor(red: 0, green: 1, blue: 0.53, alpha: 1) // Neon green
         loadingLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 + 60)
         loadingLabel.name = "loadingLabel"
