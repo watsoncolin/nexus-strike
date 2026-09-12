@@ -1,103 +1,57 @@
-Nexus Strike - iOS Arcade Shooter
+# Nexus Strike
 
-Project website: [Nexus Strike](https://watsoncolin.github.io/nexus-strike/).
+A fast-paced arcade space shooter built with Swift and SpriteKit for iOS. Survive endless waves of enemies, collect power-ups, and defeat bosses.
 
-A fast-paced arcade space shooter built with Swift and SpriteKit for iOS. Survive endless waves of enemies, collect power-ups, and defeat epic bosses.
-Features
+[Project website](https://watsoncolin.github.io/nexus-strike/) · [Download on the App Store](https://apps.apple.com/us/app/nexus-strike/id6753197968)
 
-Progressive Difficulty: Enemy spawn rate increases over time
-Level System: Advance through levels by defeating enemies
-Boss Battles: Face challenging bosses every 3 levels with health bars
-Three Enemy Types:
+## Features
 
-Normal (red) - Standard enemies
-Fast (yellow) - Quick but fragile
-Tank (purple) - Slow but requires multiple hits
+- Progressive difficulty and level advancement as you defeat enemies.
+- Boss battles every three levels.
+- Three enemy types: standard red enemies, fast yellow enemies, and tougher purple tanks.
+- Shield, rapid-fire, and multi-shot power-ups.
+- Scrolling starfields, particle effects, explosions, and screen shake.
+- Locally saved high scores and a pause menu.
 
+## Build from source
 
-Power-Up System:
+The current project targets **iOS 26.0** and uses **Swift 5 language mode**. Use Xcode 26 or later with the iOS 26 SDK.
 
-Shield - Stacking protection that absorbs damage
-Rapid Fire - Temporary increased fire rate
-Multi-Shot - Fire 3 bullets for 10 shots
+```sh
+git clone https://github.com/watsoncolin/nexus-strike.git
+cd nexus-strike
+open ArcadeShooter.xcodeproj
+```
 
+1. Select the `ArcadeShooter` scheme and an iPhone simulator or device.
+2. For a physical device, choose your development team in Signing & Capabilities.
+3. Build and run with **⌘R**.
 
-Visual Polish:
+## How to play
 
-Scrolling starfield background
-Particle effects and explosions
-Enemy glows and bullet trails
-Screen shake on impacts
+- **Move:** Touch and hold on the screen; your ship follows your finger.
+- **Shoot:** Tap to fire, or keep moving for automatic fire.
+- **Collect:** Touch power-up icons to activate abilities.
+- **Survive:** Avoid enemy contact and destroy incoming enemies.
+- **Fight bosses:** Face a boss every three levels.
 
+## Project structure
 
-Persistent High Scores: Track your best runs locally
-Pause Menu: Take breaks without losing progress
+- `ArcadeShooter/` — Swift source, scenes, audio, and game assets.
+- `ArcadeShooter.xcodeproj/` — Xcode project and shared scheme.
+- `asset-sources/` — Source artwork.
+- `docs/` — Product page and privacy policy, published with GitHub Pages.
 
-Screenshots
-[Add screenshots here once you have them]
-Requirements
+## Game design
 
-iOS 14.0+
-Xcode 14.0+
-Swift 5.0+
+Built as a learning project exploring SpriteKit scene management, touch input, collision detection, particle effects, game states, and local persistence with `UserDefaults`.
 
-Installation
+## Assets and credits
 
-Clone this repository
+- Graphics: **Space Shooter Redux** by Kenney (CC0), credited in the original project documentation.
+- Laser sound: **Laser_07.wav** by LittleRobotSoundFactory (CC BY 4.0), from Freesound.
+- Code: Swift and SpriteKit, by **Colin Watson**.
 
-bashgit clone https://github.com/yourusername/starfall.git
+## Privacy
 
-Open ArcadeShooter.xcodeproj in Xcode
-Select your target device or simulator
-Build and run (⌘+R)
-
-How to Play
-
-Move: Touch and hold anywhere on screen - your ship follows your finger
-Shoot: Tap to fire bullets (automatic while moving)
-Collect Power-ups: Touch power-up icons to activate abilities
-Survive: Avoid enemy contact and destroy as many enemies as possible
-Boss Fights: Every 3 levels, face a powerful boss enemy
-
-Game Design
-Built as a learning project to understand iOS game development fundamentals:
-
-SpriteKit scene management and game loops
-Touch input handling and gesture recognition
-Collision detection and physics
-Particle systems and visual effects
-State machines for game flow
-Data persistence with UserDefaults
-Scene transitions and UI/UX
-
-Assets & Credits
-Graphics: Space Shooter Redux by Kenney (CC0)
-
-Source: kenney.nl
-
-Sound Effects:
-
-Laser_07.wav by LittleRobotSoundFactory (CC BY 4.0)
-Source: freesound.org
-
-Code: Built with Swift and SpriteKit
-Development
-This game was developed as a learning project following iOS game development best practices:
-
-Clean architecture with separated concerns
-Efficient memory management
-Performance optimization for 60 FPS gameplay
-Responsive touch controls
-Scalable difficulty system
-
-Privacy
-Nexus Strike does not collect any user data. High scores are stored locally on your device only.
-License
-[Choose a license - MIT is common for open source games]
-Author
-Colin Watson
-Acknowledgments
-
-Apple's SpriteKit documentation and samples
-Kenney for the excellent free game assets
-The iOS game development community
+Nexus Strike does not collect user data. High scores are stored locally on your device. See the [privacy policy](https://watsoncolin.github.io/nexus-strike/privacy-policy.html).
