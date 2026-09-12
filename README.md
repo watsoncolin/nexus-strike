@@ -1,4 +1,7 @@
 Nexus Strike - iOS Arcade Shooter
+
+Project website: [Nexus Strike](https://watsoncolin.github.io/nexus-strike/).
+
 A fast-paced arcade space shooter built with Swift and SpriteKit for iOS. Survive endless waves of enemies, collect power-ups, and defeat epic bosses.
 Features
 
